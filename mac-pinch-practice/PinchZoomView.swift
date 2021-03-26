@@ -41,11 +41,11 @@ class PinchZoomView: NSView {
           delegate?.pinchZoomView(self, didChangePinching: isPinching)
       }
   }
-  
+    
   private var startLocation: CGPoint = .zero
   private var location: CGPoint = .zero
-  private var numberOfTouches: Int = 0
-  
+  private var previousMagnification: CGFloat = 0.0
+
   init() {
       super.init(frame: .zero)
 
@@ -58,16 +58,19 @@ class PinchZoomView: NSView {
   }
   
   @objc private func pinch(gesture: NSMagnificationGestureRecognizer) {
+      let magnification = gesture.magnification
+      let currentMagnification = previousMagnification + magnification
+      let scaleFactor = (currentMagnification >= 0.0) ? (1.0 + currentMagnification) : 1.0 / (1.0 - currentMagnification)
+      location = gesture.location(in: self)
+      
       switch gesture.state {
       case .began:
         isPinching = true
-        startLocation = gesture.location(in: self)
-        anchor = UnitPoint(x: startLocation.x / bounds.width, y: (bounds.height - startLocation.y) / bounds.height)
+        startLocation = location
+        anchor = UnitPoint(x: startLocation.x / bounds.width, y: (bounds.height - startLocation.y)  / bounds.height)
+        debugPrint(location)
       case .changed:
-        let magnification = gesture.magnification
-        let scaleFactor = (magnification >= 0.0) ? (1.0 + magnification) : 1.0 / (1.0 - magnification)
         scale = scaleFactor
-        location = gesture.location(in: self)
 //        offset = CGSize(width: location.x - startLocation.x, height: location.y - startLocation.y)
       case .ended, .cancelled, .failed:
         isPinching = false
@@ -76,6 +79,7 @@ class PinchZoomView: NSView {
 //          scaleFactor = 1.0
 //          offset = .zero
         }
+        previousMagnification = currentMagnification
       default:
           break
       }

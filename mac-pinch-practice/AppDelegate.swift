@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  mac-pinch-practice
 //
-//  Created by Takaaki Suzuki on 2021/03/25.
+//  Created by soudegesu on 2021/03/25.
 //
 
 import Cocoa

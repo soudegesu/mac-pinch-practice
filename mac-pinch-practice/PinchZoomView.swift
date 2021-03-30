@@ -153,8 +153,8 @@ struct PinchToZoom: ViewModifier {
   @State var anchor: UnitPoint = .center
   @State var offset: CGSize = .zero
   @State var isPinching: Bool = false
-  @Binding var width: CGFloat
-  @Binding var height: CGFloat
+  var width: CGFloat
+  var height: CGFloat
   
   func body(content: Content) -> some View {
     content
@@ -167,7 +167,7 @@ struct PinchToZoom: ViewModifier {
 }
 
 extension View {
-  func  pinchToZoom(width: Binding<CGFloat>, height: Binding<CGFloat>) -> some View {
+  func  pinchToZoom(width: CGFloat, height: CGFloat) -> some View {
     self.modifier(PinchToZoom(width: width, height: height))
   }
 }

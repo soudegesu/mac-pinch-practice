@@ -8,17 +8,15 @@
 import SwiftUI
 
 struct ContentView: View {
-  
-  @State var width: CGFloat
-  @State var height: CGFloat
-  
+    
   var body: some View {
     GeometryReader { geometry in
       ScrollView([.horizontal, .vertical], showsIndicators: false) {
         Image("Bird")
           .resizable()
-          .pinchToZoom(width: $width, height: $height)
-      }.scaledToFill() 
+          .pinchToZoom(width: geometry.size.width,
+                       height: geometry.size.height)
+      }.scaledToFill()
     }
   }
 }
@@ -26,6 +24,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(width: 640, height: 480)
+        ContentView()
     }
 }

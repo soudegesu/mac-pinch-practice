@@ -9,14 +9,16 @@ import SwiftUI
 
 struct ContentView: View {
   
+  @State var width: CGFloat
+  @State var height: CGFloat
+  
   var body: some View {
     Group {
-      ScrollView(.horizontal ) {
+      ScrollView([.horizontal, .vertical], showsIndicators: false) {
         Image("Bird")
           .resizable()
-          .aspectRatio(contentMode: .fit)
-          .pinchToZoom()
-      }.frame(width: 1280, height: 800)
+          .pinchToZoom(width: width, height: height)
+      }
     }
   }
 }
@@ -24,6 +26,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(width: 640, height: 480)
     }
 }

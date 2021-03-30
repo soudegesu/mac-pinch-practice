@@ -15,9 +15,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 
   func applicationDidFinishLaunching(_ aNotification: Notification) {
-    // Create the SwiftUI view that provides the window contents.
-    let contentView = ContentView()
-
     // Create the window and set the content view.
     window = NSWindow(
         contentRect: NSRect(x: 0, y: 0, width: 480, height: 300),
@@ -26,6 +23,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     window.isReleasedWhenClosed = false
     window.center()
     window.setFrameAutosaveName("Main Window")
+    
+    // Create the SwiftUI view that provides the window contents.
+    let contentView = ContentView(width: window.frame.width, height: window.frame.height)
     window.contentView = NSHostingView(rootView: contentView)
     window.makeKeyAndOrderFront(nil)
   }

@@ -30,12 +30,6 @@ class PinchZoomView: NSView {
       }
   }
 
-  private(set) var offset: CGSize = .zero {
-      didSet {
-          delegate?.pinchZoomView(self, didChangeOffset: offset)
-      }
-  }
-
   private(set) var isPinching: Bool = false {
       didSet {
           delegate?.pinchZoomView(self, didChangePinching: isPinching)
@@ -71,13 +65,10 @@ class PinchZoomView: NSView {
         debugPrint(location)
       case .changed:
         scale = scaleFactor
-//        offset = CGSize(width: location.x - startLocation.x, height: location.y - startLocation.y)
       case .ended, .cancelled, .failed:
         isPinching = false
         if scale <= minScale {
           scale = minScale
-//          scaleFactor = 1.0
-//          offset = .zero
         }
         previousMagnification = currentMagnification
       default:
@@ -91,7 +82,6 @@ protocol PinchZoomViewDelgate: AnyObject {
   func pinchZoomView(_ pinchZoomView: PinchZoomView, didChangeScale scale: CGFloat)
   func pinchZoomView(_ pinchZoomView: PinchZoomView, didChangeMinScale minScale: CGFloat)
   func pinchZoomView(_ pinchZoomView: PinchZoomView, didChangeAnchor anchor: UnitPoint)
-  func pinchZoomView(_ pinchZoomView: PinchZoomView, didChangeOffset offset: CGSize)
 }
 
 struct PinchZoom: NSViewRepresentable {
@@ -101,7 +91,6 @@ struct PinchZoom: NSViewRepresentable {
   @Binding var scale: CGFloat
   @Binding var minScale: CGFloat
   @Binding var anchor: UnitPoint
-  @Binding var offset: CGSize
   @Binding var isPinching: Bool
   
   func makeNSView(context: Context) -> PinchZoomView {
@@ -139,10 +128,6 @@ struct PinchZoom: NSViewRepresentable {
     func pinchZoomView(_ pinchZoomView: PinchZoomView, didChangeAnchor anchor: UnitPoint) {
         pinchZoom.anchor = anchor
     }
-
-    func pinchZoomView(_ pinchZoomView: PinchZoomView, didChangeOffset offset: CGSize) {
-        pinchZoom.offset = offset
-    }
   }
 }
 
@@ -151,7 +136,6 @@ struct PinchToZoom: ViewModifier {
   @State var scale: CGFloat = 1.0
   @State var minScale: CGFloat = 1.0
   @State var anchor: UnitPoint = .center
-  @State var offset: CGSize = .zero
   @State var isPinching: Bool = false
   var width: CGFloat
   var height: CGFloat
@@ -160,9 +144,8 @@ struct PinchToZoom: ViewModifier {
     content
       .aspectRatio(contentMode: .fit)
       .frame(width: width * scale, height: height * scale, alignment: .center)
-      .offset(offset)
       .animation(isPinching ? .none : .spring())
-      .overlay(PinchZoom(scale: $scale, minScale: $minScale, anchor: $anchor, offset: $offset, isPinching: $isPinching))
+      .overlay(PinchZoom(scale: $scale, minScale: $minScale, anchor: $anchor, isPinching: $isPinching))
   }
 }
 

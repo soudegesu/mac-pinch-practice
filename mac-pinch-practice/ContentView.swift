@@ -13,12 +13,12 @@ struct ContentView: View {
   @State var height: CGFloat
   
   var body: some View {
-    Group {
+    GeometryReader { geometry in
       ScrollView([.horizontal, .vertical], showsIndicators: false) {
         Image("Bird")
           .resizable()
-          .pinchToZoom(width: width, height: height)
-      }
+          .pinchToZoom(width: $width, height: $height)
+      }.scaledToFill() 
     }
   }
 }

@@ -153,12 +153,12 @@ struct PinchToZoom: ViewModifier {
   @State var anchor: UnitPoint = .center
   @State var offset: CGSize = .zero
   @State var isPinching: Bool = false
-  @State var width: CGFloat
-  @State var height: CGFloat
+  @Binding var width: CGFloat
+  @Binding var height: CGFloat
   
   func body(content: Content) -> some View {
     content
-      .scaleEffect(scale, anchor: anchor)
+      .aspectRatio(contentMode: .fit)
       .frame(width: width * scale, height: height * scale, alignment: .center)
       .offset(offset)
       .animation(isPinching ? .none : .spring())
@@ -167,7 +167,7 @@ struct PinchToZoom: ViewModifier {
 }
 
 extension View {
-  func  pinchToZoom(width: CGFloat, height: CGFloat) -> some View {
+  func  pinchToZoom(width: Binding<CGFloat>, height: Binding<CGFloat>) -> some View {
     self.modifier(PinchToZoom(width: width, height: height))
   }
 }

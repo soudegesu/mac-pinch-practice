@@ -132,7 +132,7 @@ struct PinchToZoomModifier: ViewModifier {
     content
       .aspectRatio(contentMode: .fit)
       .frame(width: width * scale, height: height * scale, alignment: .center)
-      .animation(isPinching ? .none : .spring())
+//      .animation(isPinching ? .none : .spring())
       .overlay(PinchZoom(scale: $scale, anchor: $anchor, isPinching: $isPinching))
   }
 }
